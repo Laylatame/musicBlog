@@ -18,21 +18,35 @@
   }
   
   fieldset{
-      border: 2px dashed #dddddd;
-      margin: 20px;
-      padding: 20px;
-  }
+    border: none;
+    display: flex;
+    flex-direction: row;
+}
   
-  fieldset > span.info{
-      background: url('./../img/infoicon.png') no-repeat #CCE9F8;;
-      border: 1px solid #6278B0;
-      color: #42579C;
-      padding: 20px 40px;
-      display : block;
-      background-size: 20px 20px;
-      background-position: 15px 18px;
-  
-  }
+
+.fielditem{
+    padding: 5px 0px;
+    width: 100%;
+}
+
+.content{
+    padding: 5px 0px;
+    width: 100%;
+    height: 200px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+#postBlog, #deleteBlog, #updateBlog{
+    margin: 5px 0px;
+    padding: 5px;
+    background-color: gray;
+    color: white;
+}
+
+.errorPost, .errorDelete, .errorUpdate{
+    color: red;
+}
   
   .formElement{
       font-size: 14px;
@@ -96,7 +110,7 @@
     padding: 0px 15px;
 }
 
-.mainHomePage{
+.mainHomePage, .mainMyBlogs{
     margin: 0px 20px;
     display: flex;
     flex-direction: row;
@@ -113,4 +127,15 @@
 
 .favoriteHome{
     background-color: red;
+}
+
+.postsMyBlogs{
+    width: 50%;
+}
+
+.modifyMyBlogs{
+    width: 50%;
+    padding: 0px 15px;
+    margin: 15px 15px;
+    border: 2px dashed #dddddd;
 }

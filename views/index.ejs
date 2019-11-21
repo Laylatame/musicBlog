@@ -10,18 +10,6 @@
                 </ul>
         </div>
     </section>
-    <section id="myBlogsPage" hidden>
-        My Blogs Page
-        <h3>Post New Blog</h3>
-                <fieldset class="newBlog">
-                    <label for="titlePost" class="fielditem">Title </label>
-                    <input type="text" id="titlePost" class="fielditem"/>
-                    <label for="contentPost" class="fielditem">Content </label>
-                    <textarea name="text" id="contentPost" class="content" rows="20" wrap="soft"></textarea>
-                    <button id="postBlog">Post Blog</button>
-                    <h5 class="errorPost"></h5>
-        </fieldset>
-    </section>
 
 
 
@@ -56,11 +44,66 @@
 
 
 
-
     
     <section id="myBlogsPage" hidden>
-            My Blogs Page
+            <div class="mainMyBlogs">
+                    <div class="postsMyBlogs">
+                    </div>
+                    <div class="modifyMyBlogs">
+                        <h2>Modify Reviews</h2>
+                        <h3>Post New Review</h3>
+                        <fieldset class="newBlog">
+                            <label for="titlePost" class="fielditem">Title </label>
+                            <input type="text" id="titlePost" class="fielditem"/>
+                            <label for="contentPost" class="fielditem">Content </label>
+                            <textarea name="text" id="contentPost" class="content" rows="20" wrap="soft"></textarea>
+                            <button id="postBlog">Post Review</button>
+                            <h5 class="errorPost"></h5>
+                        </fieldset>
+                        <h3>Delete Review</h3>
+                        <fieldset class="deleteBlog">
+                            <label for="idDelete" class="fielditem">ID </label>
+                            <input type="text" id="idDelete" class="fielditem"/>
+                            <button id="deleteBlog">Delete Review</button>
+                            <h5 class="errorDelete"></h5>
+                        </fieldset>
+                        <h3>Update Existing Review</h3>
+                        <fieldset class="updateBlog">
+                            <label for="idUpdate" class="fielditem">ID </label>
+                            <input type="text" id="idUpdate" class="fielditem"/>
+                            <label for="titleUpdate" class="fielditem">Title </label>
+                            <input type="text" id="titleUpdate" class="fielditem"/>
+                            <label for="contentUpdate" class="fielditem">Content </label>
+                            <textarea name="text" id="contentUpdate" class="content" rows="20" wrap="soft"></textarea>
+                            <button id="updateBlog">Update Review</button>
+                            <h5 class="errorUpdate"></h5>
+                        </fieldset>
+                    </div>
+                </div>
     </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <section id="vinylPage" hidden>
             My Vinyls
     </section>

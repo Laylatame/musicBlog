@@ -41,7 +41,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-//Get all posts
+//Get all reviews
 app.get("/api/blog-posts", (req, res) => {
     if(req.session.loggedin){
 
@@ -60,7 +60,7 @@ app.get("/api/blog-posts", (req, res) => {
     return res.status(404).json({message: "Not logged in", status: 404});
 });
 
-//Get favorite posts
+//Get favorite reviews
 app.get("/api/favorites", (req, res) => {
     if(req.session.loggedin){
 
@@ -78,6 +78,24 @@ app.get("/api/favorites", (req, res) => {
     }
     return res.status(404).json({message: "Not logged in", status: 404});
 });
+
+//Get reviews by user
+app.get("/api/getUser", jsonParser, (req, res, next) => {
+
+    let user = req.session.username;
+
+    BlogPost.find({username : username}).sort({publishDate: 'desc'}).exec(function (err, blogPosts) {
+        if (!blogPosts){
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : "Something went wrong with the DB. Try again later."
+            });
+        } else {                
+            return res.status(409).json({message: "Username is taken.", status: 409});
+        }
+    });
+})
 
 
 /*
@@ -158,6 +176,7 @@ app.post("/api/blog-posts", jsonParser, (req, res) => {
 
     let title = req.body.title;
     let content = req.body.content;
+    let button = req.body.button;
 
     if (! title || ! content){
         return res.status(406).json({message: "Fields incomplete", status: 406});
@@ -169,7 +188,7 @@ app.post("/api/blog-posts", jsonParser, (req, res) => {
         content: content,
         author: req.session.username,
         publishDate: new Date(),
-        button: "<button type='submit' class='addFavorite'> Add to favorites </button>"
+        button: button
     });
 
     blogPost.save(function (err, blogPost) {
@@ -179,15 +198,24 @@ app.post("/api/blog-posts", jsonParser, (req, res) => {
 
 });
 
+//Add new favorite
 app.post("/api/addFavorite", jsonParser, (req, res) => {
 
     let savedBy = req.session.username;
     let postId = req.body.postId;
+    let title = req.body.title;
+    let content = req.body.content;
+    let publishDate = req.body.publishDate;
+    let button = req.body.button;
 
     FavReview.new
     let favReview = new FavReview ({
         savedBy: savedBy,
         postId: postId,
+        title: title,
+        content: content,
+        publishDate: publishDate,
+        button: button
     });
 
     favReview.save(function (err, favReview) {
@@ -255,7 +283,7 @@ app.delete("/api/blog-posts/:id", (req, res) => {
 
     return res.status(404).json({message: "Blog not found.", status: 404});
 });
-
+*/
 app.put("/api/blog-posts/:id", jsonParser, (req, res) => {
     
     let idB = req.body.id;
@@ -270,19 +298,53 @@ app.put("/api/blog-posts/:id", jsonParser, (req, res) => {
         return res.status(409).json({message: "Id in body and params don't match", status: 409});
     }
 
-    for (let i=0; i<posts.length; i++){
-        if (posts[i].id == id){
-            if(content.title != undefined){posts[i].title = content.title;}
-            if(content.content != undefined){posts[i].content = content.content;}
-            if(content.author != undefined){posts[i].author = content.author;}
-            if(content.publishDate != undefined){posts[i].publishDate = new Date(content.publishDate);}
-            return res.status(202).json({message: "Object updated: " + posts[i].title, status: 202});
+    if(content.title != undefined){
+        if(content.content != undefined){
+            BlogPost.findOneAndUpdate({"_id": id}, { "$set": { "title": content.title, "content": content.content}}).exec(function(err, blogPost){
+                if(err) {
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : "Something went wrong with the DB. Try again later."
+                    });
+                } else {
+                    return res.status(201).json(blogPost);
+
+                }
+            });
+        } else {
+            BlogPost.findOneAndUpdate({"_id": id}, { "$set": { "title": content.title}}).exec(function(err, blogPost){
+                if(err) {
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : "Something went wrong with the DB. Try again later."
+                    });
+                } else {
+                    return res.status(201).json(blogPost);
+                }
+            });
+        }
+    } else {
+        if(content.content != undefined){
+            BlogPost.findOneAndUpdate({"_id": id}, { "$set": { "content": content.content}}).exec(function(err, blogPost){
+                if(err) {
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : "Something went wrong with the DB. Try again later."
+                    });
+                } else {
+                    return res.status(201).json(blogPost);
+                }
+            });
+        } else {
+            return res.status(200).json({message: "Nothing to update", status: 200});
         }
     }
-
-    return res.status(406).json({message: "Blog not found ", status: 406});
 });
-*/
+
+
 
 let server;
 
@@ -330,9 +392,3 @@ runServer( PORT, DATABASE_URL )
 
 module.exports = { app, runServer, closeServer };
 
-
-
-//Checar si hay sesion, si no mandar a login
-//Quitar autor, agarrar el autor de la sesion
-//Si no hay sesion login y register, quitar logout
-//Si hay sesiòn logout, quitar login y register
