@@ -61,10 +61,11 @@ app.get("/api/blog-posts", (req, res) => {
 });
 
 //Get favorite reviews
-app.get("/api/favorites", (req, res) => {
+app.get("/api/getFavorites", (req, res) => {
     if(req.session.loggedin){
 
         return FavReview.find({}).sort({publishDate: 'desc'}).exec(function(err, favReviews) {
+
             if(err) {
                 res.statusMessage = "Something went wrong with the DB. Try again later.";
                 return res.status( 500 ).json({
@@ -80,22 +81,37 @@ app.get("/api/favorites", (req, res) => {
 });
 
 //Get reviews by user
-app.get("/api/getUser", jsonParser, (req, res, next) => {
+/*
+app.get("/api/getUsersReviews", jsonParser, (req, res, next) => {
+    let username = req.body.username;
+    console.log(username);
 
-    let user = req.session.username;
-
-    BlogPost.find({username : username}).sort({publishDate: 'desc'}).exec(function (err, blogPosts) {
-        if (!blogPosts){
+    BlogPost.find({username : username}, function (err, blogPosts) {
+        console.log(username);
+        console.log("QUE PASA AQUU");
+        if(err){
             res.statusMessage = "Something went wrong with the DB. Try again later.";
-            return res.status( 500 ).json({
-                status : 500,
-                message : "Something went wrong with the DB. Try again later."
-            });
-        } else {                
-            return res.status(409).json({message: "Username is taken.", status: 409});
+                return res.status( 500 ).json({
+                    status : 500,
+                    message : "Something went wrong with the DB. Try again later."
+                });
+        } else {
+            if (!blogPosts){
+                res.statusMessage = "User has no reviews.";
+                return res.status( 404 ).json({
+                    status : 404,
+                    message : "User has no reviews."
+                });
+            } else {                
+                return res.status(201).json({blogPosts: blogPosts, username: req.session.username});
+            }
         }
     });
+    
+    //return res.status(300).json({message: "Not logged in", status: 300});
+
 })
+*/
 
 
 /*
@@ -138,7 +154,7 @@ app.post("/api/register", jsonParser, (req, res, next) => {
             return res.status(409).json({message: "Username is taken.", status: 409});
         }
     });
-})
+});
 
 
 app.post('/api/auth', function(req, res) {
@@ -163,7 +179,7 @@ app.post('/api/auth', function(req, res) {
                     } 
                     req.session.loggedin = true;
                     req.session.username = username;
-                    return res.status(201).json(req.session);
+                    return res.status(201).json(req.session.username);
                 }
             });
         });
@@ -251,39 +267,9 @@ app.delete("/api/deleteFavorite", (req, res) => {
             return res.status(200).json(favReview);
         }
     });
-
-    
-/*
-    FavReview.where().findOneAndDelete({"_id": id}, (err, favReview) => {
-        if(err) {
-            res.statusMessage = "Something went wrong with the DB. Try again later.";
-            return res.status( 500 ).json({
-                status : 500,
-                message : "Something went wrong with the DB. Try again later."
-            });
-        } else {
-            console.log("Sucess");
-            return res.status(201).json(favReview);
-        }
-    });
-    */
 });
-
-/*
-app.delete("/api/blog-posts/:id", (req, res) => {
-
-    let id = req.params.id;
     
-    for(let i=0; i<posts.length; i++){
-        if (posts[i].id == id){
-            posts = posts.filter(post => post.id != id);
-            return res.status(200).json({message: "Blog removed.", status: 200});
-        }
-    }
 
-    return res.status(404).json({message: "Blog not found.", status: 404});
-});
-*/
 app.put("/api/blog-posts/:id", jsonParser, (req, res) => {
     
     let idB = req.body.id;

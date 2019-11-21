@@ -99,7 +99,7 @@ function init(){
         },
         error: function(err){
             if(err.statusText = "404"){
-                $('.blogPostsHome').append(`<p>Not logged in<p>`);
+                $('.blogPostsHome').append(`<p>Not logged in. Proceed to login page.<p>`);
             }
             console.log("Error");
         }
@@ -107,22 +107,26 @@ function init(){
 
 
     $.ajax({
-        url: "http://localhost:8080/api/favorites",
+        url: "http://localhost:8080/api/getFavorites",
         method: "GET",
         dataType: "json",
         success: function(response){
+            console.log(response);
             var cont = 10;
             for (let i=0; i<response.length; i++){
                 if(cont>0){
                 let title = (`<h2>${response[i].title}</h2>`);
-                let author = (`<h4> Written by: ${response[i].savedBy}</h4>`);
+                let author = (`<h4> Written by: ${response[i].author}</h4>`);
                 let date = (`<h6>Published on: ${response[i].publishDate}</h6>`);
                 let content = (`<p>${response[i].content}</p>`);
-                let id = (`<h6 id="postIdHome">ID: ${response[i]._id}</h6>`);
-                //let buttonFav = (`<div id="buttonFav"><button type='submit' class='favoriteHome'> Delete from Favorites</button></div>`);
-                let buttonFav = (`<div id="buttonFav">${response[i].button}</div>`);
+                let id = (`<h6 id="postIdHome">ID: ${response[i]._id} </h6>`);
+                let buttonFav = (`<div id="buttonFav"><button type='submit' class='favoriteHome'> Add to favorites </button></div>`);
+                //let buttonFav = (`<div id="buttonFav">${response[i].button}</div>`);
                 let secc = $(buttonFav)[0].childNodes[0].className;
-                $('.favBlogsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
+                //if(secc == "addFavorite"){
+                    $('.favBlogsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
+                //}
+                //console.log(secc[0].childNodes[0].className);
                 console.log(secc);
                 cont--;
                 } 
@@ -130,12 +134,12 @@ function init(){
         },
         error: function(err){
             if(err.statusText = "404"){
-                $('.favBlogsHome').append(`<p>Not logged in<p>`);
+                console.log("404");
             }
             console.log("Error");
         }
     });
-}
+};
 
 function reload(){
 
@@ -156,8 +160,8 @@ function reload(){
                 let date = (`<h6>Published on: ${response[i].publishDate}</h6>`);
                 let content = (`<p>${response[i].content}</p>`);
                 let id = (`<h6 id="postIdHome">ID: ${response[i]._id}</h6>`);
-                let buttonFav = (`<div id="buttonFav"><button type='submit' class='addFavorite'> Add to favorites </button></div>`);
-                //let buttonFav = (`<div id="buttonFav">${response[i].button}</div>`);
+                //let buttonFav = (`<div id="buttonFav"><button type='submit' class='addFavorite'> Add to favorites </button></div>`);
+                let buttonFav = (`<div id="buttonFav">${response[i].button}</div>`);
                 let secc = $(buttonFav)[0].childNodes[0].className;
                 //if(secc == "addFavorite"){
                     $('.blogPostsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
@@ -170,7 +174,7 @@ function reload(){
         },
         error: function(err){
             if(err.statusText = "404"){
-                $('.blogPostsHome').append(`<p>Not logged in<p>`);
+                $('.blogPostsHome').append(`<p>Not logged in. Proceed to login page.<p>`);
             }
             console.log("Error");
         }
@@ -178,10 +182,11 @@ function reload(){
 
 
     $.ajax({
-        url: "http://localhost:8080/api/favorites",
+        url: "http://localhost:8080/api/getFavorites",
         method: "GET",
         dataType: "json",
         success: function(response){
+            console.log(response);
             var cont = 10;
             for (let i=0; i<response.length; i++){
                 if(cont>0){
@@ -200,14 +205,48 @@ function reload(){
             }
         },
         error: function(err){
-            if(err.statusText = "404"){
-                $('.favBlogsHome').append(`<p>Not logged in<p>`);
+            if(err.statusText = "300"){
+                $('.favBlogsHome').append(`<p>Not logged in. Proceed to login page.<p>`);
             }
             console.log("Error");
         }
     });
-}
-/*
+};
+
+function initMyPosts(username){
+    $(".postsMyBlogs").empty();
+
+    $.ajax({
+        url: "http://localhost:8080/api/getUsersReviews",
+        data: JSON.stringify({
+            "username": username
+        }),
+        method: "GET",
+        dataType: "json",
+        success: function(response){
+            console.log("Corre");
+            console.log(response);
+            console.log(response.username);
+            for (let i=0; i<response.blogPosts.length; i++){
+                if(response.username == response.blogPosts[i].author){
+                let title = (`<h2>${response.blogPosts[i].title}</h2>`);
+                let author = (`<h4> Written by: ${response.blogPosts[i].author}</h4>`);
+                let date = (`<h6>Published on: ${response.blogPosts[i].publishDate}</h6>`);
+                let content = (`<p>${response.blogPosts[i].content}</p>`);
+                let id = (`<h6 id="postIdHome">ID: ${response.blogPosts[i]._id} </h6>`);
+                $('.postsMyBlogs').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content}</div>`);
+                }
+            }
+        },
+        error: function(err){
+            if(err.statusText = "300"){
+                $('.postsMyBlogs').append(`<p>Not logged in. Proceed to login page.<p>`);
+            }
+            console.log("Error");
+        }
+    });
+};
+
 function initFavorites(){
     
 
@@ -242,7 +281,7 @@ function initFavorites(){
             console.log("Error");
         }
     });
-}*/
+}
 
 //Add new user
 $("#registerSubmit").on("click", (event) => {
@@ -287,6 +326,8 @@ $("#loginSubmit").on("click", (event) => {
         dataType: "json",
         contentType: "application/json",
         success: function(response){
+            console.log("Login");
+            console.log(response);
             $("#usernameLogin").val("");
             $("#passwordLogin").val("");
             document.getElementById("register").hidden = true;
@@ -299,6 +340,7 @@ $("#loginSubmit").on("click", (event) => {
             document.getElementById("homePage").className = "currentSelected";
             document.getElementById("loginPage").className = "";
             init();
+            //initMyPosts(response);
         },
         error: function(err){
             console.log(err.statusText);
@@ -473,7 +515,7 @@ $("#updateBlog").on("click", (event) => {
             $("#idUpdate").val("");
             $("#titleUpdate").val("");
             $("#contentUpdate").val("");
-            init();
+            //init();
         },
         error: function(err){
             console.log(err.status);
@@ -492,3 +534,4 @@ $("#updateBlog").on("click", (event) => {
 
 navigationMenu();
 init();
+//initMyPosts();
