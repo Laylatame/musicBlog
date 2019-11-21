@@ -381,33 +381,28 @@ $(".blogPostsHome, .favBlogsHome").on("click", "button", function(event) {
             }
         });
 
-        //buttonFav[0].className = "favoriteHome";
-        //buttonFav[0].textContent = "Added to favorites";
-        //console.log(divButton);
-        //console.log(divButton[0]);
         //divButton[0].hidden = true;
     }
     reload();
 });
 
-/*
+
 $("#deleteBlog").on("click", (event) => {
     event.preventDefault();
-    console.log("Delete blog");
 
     let id = $("#idDelete").val();
 
     $.ajax({
-        url: "http://localhost:8080/api/blog-posts" + "/" + id,
+        url: "http://localhost:8080/api/deleteReview",
         data: JSON.stringify({"id": id}),
         method: "DELETE",
         dataType: "json",
         contentType: "application/json",
         success: function(response){
             $(".errorDelete").empty();
-            console.log(response.message);
             $("#idDelete").val("");
             init();
+            initMyPosts(response);
         },
         error: function(err){
             console.log(err.status);
@@ -423,7 +418,7 @@ $("#deleteBlog").on("click", (event) => {
 
     });
 })
-*/
+
 
 $("#updateBlog").on("click", (event) => {
     event.preventDefault();

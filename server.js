@@ -260,6 +260,23 @@ app.delete("/api/deleteFavorite", (req, res) => {
         }
     });
 });
+
+app.delete("/api/deleteReview", (req, res) => {
+
+    let id = req.body.id;
+
+    BlogPost.deleteOne({_id:id, author: req.session.username}, function(err, blogPost) {
+        if(err) {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : "Something went wrong with the DB. Try again later."
+            });
+        } else {
+            return res.status(200).json(req.session.username);
+        }
+    });
+});
     
 
 app.put("/api/blog-posts/:id", jsonParser, (req, res) => {
