@@ -2,7 +2,6 @@
 //import { request } from "http";
 
 function navigationMenu(){
-    console.log("Ya corrio");
     let menuItems = document.getElementsByTagName( "li" );
 
     for ( let i = 0; i < menuItems.length; i ++ ){
@@ -86,13 +85,8 @@ function init(){
                 let content = (`<p>${response[i].content}</p>`);
                 let id = (`<h6 id="postIdHome">ID: ${response[i]._id} </h6>`);
                 let buttonFav = (`<div id="buttonFav"><button type='submit' class='addFavorite'> Add to favorites </button></div>`);
-                //let buttonFav = (`<div id="buttonFav">${response[i].button}</div>`);
-                let secc = $(buttonFav)[0].childNodes[0].className;
-                //if(secc == "addFavorite"){
-                    $('.blogPostsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
-                //}
-                //console.log(secc[0].childNodes[0].className);
-                console.log(secc);
+                //let secc = $(buttonFav)[0].childNodes[0].className;
+                $('.blogPostsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
                 cont--;
                 } 
             }
@@ -111,7 +105,6 @@ function init(){
         method: "GET",
         dataType: "json",
         success: function(response){
-            console.log(response);
             var cont = 10;
             for (let i=0; i<response.length; i++){
                 if(cont>0){
@@ -121,13 +114,8 @@ function init(){
                 let content = (`<p>${response[i].content}</p>`);
                 let id = (`<h6 id="postIdHome">ID: ${response[i]._id} </h6>`);
                 let buttonFav = (`<div id="buttonFav"><button type='submit' class='favoriteHome'> Add to favorites </button></div>`);
-                //let buttonFav = (`<div id="buttonFav">${response[i].button}</div>`);
-                let secc = $(buttonFav)[0].childNodes[0].className;
-                //if(secc == "addFavorite"){
-                    $('.favBlogsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
-                //}
-                //console.log(secc[0].childNodes[0].className);
-                console.log(secc);
+                //let secc = $(buttonFav)[0].childNodes[0].className;
+                $('.favBlogsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
                 cont--;
                 } 
             }
@@ -160,14 +148,9 @@ function reload(){
                 let date = (`<h6>Published on: ${response[i].publishDate}</h6>`);
                 let content = (`<p>${response[i].content}</p>`);
                 let id = (`<h6 id="postIdHome">ID: ${response[i]._id}</h6>`);
-                //let buttonFav = (`<div id="buttonFav"><button type='submit' class='addFavorite'> Add to favorites </button></div>`);
                 let buttonFav = (`<div id="buttonFav">${response[i].button}</div>`);
-                let secc = $(buttonFav)[0].childNodes[0].className;
-                //if(secc == "addFavorite"){
-                    $('.blogPostsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
-                //}
-                //console.log(secc[0].childNodes[0].className);
-                console.log(secc);
+                //let secc = $(buttonFav)[0].childNodes[0].className;
+                $('.blogPostsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
                 cont--;
                 } 
             }
@@ -186,7 +169,6 @@ function reload(){
         method: "GET",
         dataType: "json",
         success: function(response){
-            console.log(response);
             var cont = 10;
             for (let i=0; i<response.length; i++){
                 if(cont>0){
@@ -197,9 +179,7 @@ function reload(){
                 let id = (`<h6 id="postIdHome">ID: ${response[i]._id}</h6>`);
                 //let buttonFav = (`<div id="buttonFav"><button type='submit' class='favoriteHome'> Delete from Favorites</button></div>`);
                 let buttonFav = (`<div id="buttonFav">${response[i].button}</div>`);
-                let secc = $(buttonFav)[0].childNodes[0].className;
                 $('.favBlogsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
-                console.log(secc);
                 cont--;
                 } 
             }
@@ -217,16 +197,13 @@ function initMyPosts(username){
     $(".postsMyBlogs").empty();
 
     $.ajax({
-        url: "http://localhost:8080/api/getUsersReviews",
+        url: "http://localhost:8080/api/getUserReviews",
         data: JSON.stringify({
             "username": username
         }),
         method: "GET",
         dataType: "json",
         success: function(response){
-            console.log("Corre");
-            console.log(response);
-            console.log(response.username);
             for (let i=0; i<response.blogPosts.length; i++){
                 if(response.username == response.blogPosts[i].author){
                 let title = (`<h2>${response.blogPosts[i].title}</h2>`);
@@ -239,49 +216,14 @@ function initMyPosts(username){
             }
         },
         error: function(err){
-            if(err.statusText = "300"){
+            if(err.statusText = "404"){
                 $('.postsMyBlogs').append(`<p>Not logged in. Proceed to login page.<p>`);
             }
-            console.log("Error");
+            console.log(err.status);
         }
     });
 };
 
-function initFavorites(){
-    
-
-    $(".favBlogsHome").empty();
-
-    $.ajax({
-        url: "http://localhost:8080/api/favorites",
-        method: "GET",
-        dataType: "json",
-        success: function(response){
-            var cont = 10;
-            for (let i=0; i<response.length; i++){
-                if(cont>0){
-                let title = (`<h2>${response[i].title}</h2>`);
-                let author = (`<h4> Written by: ${response[i].author}</h4>`);
-                let date = (`<h6>Published on: ${response[i].publishDate}</h6>`);
-                let content = (`<p>${response[i].content}</p>`);
-                let id = (`<h6 id="postIdHome">ID: ${response[i]._id}</h6>`);
-                //let buttonFav = (`<div id="buttonFav"><button type='submit' class='favoriteHome'> Delete from Favorites</button></div>`);
-                let buttonFav = (`<div id="buttonFav">${response[i].button}</div>`);
-                let secc = $(buttonFav)[0].childNodes[0].className;
-                $('.favBlogsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
-                console.log(secc);
-                cont--;
-                } 
-            }
-        },
-        error: function(err){
-            if(err.statusText = "404"){
-                $('.favBlogsHome').append(`<p>Not logged in<p>`);
-            }
-            console.log("Error");
-        }
-    });
-}
 
 //Add new user
 $("#registerSubmit").on("click", (event) => {
@@ -314,7 +256,6 @@ $("#registerSubmit").on("click", (event) => {
 //Initiate user session
 $("#loginSubmit").on("click", (event) => {
     event.preventDefault();
-    console.log("Authenticate");
 
     $.ajax({
         url: "http://localhost:8080/api/auth",
@@ -326,8 +267,6 @@ $("#loginSubmit").on("click", (event) => {
         dataType: "json",
         contentType: "application/json",
         success: function(response){
-            console.log("Login");
-            console.log(response);
             $("#usernameLogin").val("");
             $("#passwordLogin").val("");
             document.getElementById("register").hidden = true;
@@ -340,7 +279,7 @@ $("#loginSubmit").on("click", (event) => {
             document.getElementById("homePage").className = "currentSelected";
             document.getElementById("loginPage").className = "";
             init();
-            //initMyPosts(response);
+            initMyPosts(response);
         },
         error: function(err){
             console.log(err.statusText);
@@ -368,11 +307,10 @@ $("#postBlog").on("click", (event) => {
         contentType: "application/json",
         success: function(response){
             $(".errorPost").empty();
-            console.log("success post");
-            console.log(response.message);
             $("#titlePost").val("");
             $("#contentPost").val("");
             init();
+            initMyPosts(response);
         },
         error: function(err){
             console.log(err.statusText);
@@ -388,7 +326,6 @@ $(".blogPostsHome, .favBlogsHome").on("click", "button", function(event) {
 
     let buttonFav = $(this);
     let divButton = buttonFav.parent().parent();
-    let postID = divButton[0].childNodes[5];
     let post = divButton[0].childNodes;
 
     if(buttonFav.hasClass("favoriteHome")){
@@ -403,7 +340,6 @@ $(".blogPostsHome, .favBlogsHome").on("click", "button", function(event) {
                 for(let i=0; i<response.length; i++){
                     let varID = "ID: " + response[i]._id;
                     if(varID == post[5].innerHTML){
-                        console.log("TRUE");
                         $.ajax({
                             url: "http://localhost:8080/api/deleteFavorite",
                             data: JSON.stringify({
@@ -493,7 +429,6 @@ $("#updateBlog").on("click", (event) => {
     event.preventDefault();
 
     let id = $("#idUpdate").val();
-    console.log(id);
 
     let content = {
         "title": $("#titleUpdate").val() != "" ? $("#titleUpdate").val() : undefined,
@@ -511,11 +446,11 @@ $("#updateBlog").on("click", (event) => {
         contentType: "application/json",
         success: function(response){
             $(".errorUpdate").empty();
-            console.log(response.message);
             $("#idUpdate").val("");
             $("#titleUpdate").val("");
             $("#contentUpdate").val("");
-            //init();
+            init();
+            initMyPosts(response);
         },
         error: function(err){
             console.log(err.status);

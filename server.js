@@ -81,37 +81,29 @@ app.get("/api/getFavorites", (req, res) => {
 });
 
 //Get reviews by user
-/*
-app.get("/api/getUsersReviews", jsonParser, (req, res, next) => {
-    let username = req.body.username;
-    console.log(username);
+app.get("/api/getUserReviews", jsonParser, (req, res, next) => {
+    if(req.session.loggedin){
 
-    BlogPost.find({username : username}, function (err, blogPosts) {
-        console.log(username);
-        console.log("QUE PASA AQUU");
-        if(err){
-            res.statusMessage = "Something went wrong with the DB. Try again later.";
-                return res.status( 500 ).json({
-                    status : 500,
-                    message : "Something went wrong with the DB. Try again later."
-                });
-        } else {
-            if (!blogPosts){
-                res.statusMessage = "User has no reviews.";
-                return res.status( 404 ).json({
-                    status : 404,
-                    message : "User has no reviews."
-                });
-            } else {                
-                return res.status(201).json({blogPosts: blogPosts, username: req.session.username});
+        return BlogPost.find({}).sort({publishDate: 'desc'}).exec(function(err, blogPosts) {
+            if(err){
+                res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status( 500 ).json({
+                        status : 500,
+                        message : "Something went wrong with the DB. Try again later."
+                    });
+            } else {
+                if (!blogPosts){
+                    res.statusMessage = "User has no reviews.";
+                    return res.status(202).json({});
+                } else {                
+                    return res.status(201).json({blogPosts: blogPosts, username: req.session.username});
+                }
             }
-        }
-    });
-    
-    //return res.status(300).json({message: "Not logged in", status: 300});
-
+        });
+    }
+    return res.status(404).json({message: "Not logged in", status: 404});
 })
-*/
+
 
 
 /*
@@ -209,7 +201,7 @@ app.post("/api/blog-posts", jsonParser, (req, res) => {
 
     blogPost.save(function (err, blogPost) {
         if (err) return console.error(err);
-        return res.status(201).json({message: "Success: " + title + " was added.", status: 201});
+        return res.status(201).json(req.session.username);
       });
 
 });
@@ -307,7 +299,7 @@ app.put("/api/blog-posts/:id", jsonParser, (req, res) => {
                         message : "Something went wrong with the DB. Try again later."
                     });
                 } else {
-                    return res.status(201).json(blogPost);
+                    return res.status(201).json(req.session.username);
                 }
             });
         }
