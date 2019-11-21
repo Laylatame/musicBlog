@@ -95,3 +95,22 @@
     margin: 15px 0px;
     padding: 0px 15px;
 }
+
+.mainHomePage{
+    margin: 0px 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.postsHome{
+    width: 50%;
+}
+
+.favBlogPostHome{
+    width: 50%;
+    padding: 0px 0px 0px 5px;
+}
+
+.favoriteHome{
+    background-color: red;
+}

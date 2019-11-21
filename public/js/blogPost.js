@@ -4,7 +4,8 @@ var blogPostSchema = new mongoose.Schema ({
     title: String,
     content: String,
     author: String,
-    publishDate: Date
+    publishDate: Date,
+    button: String
 })
 
 var BlogPost = new mongoose.model('BlogPost', blogPostSchema);

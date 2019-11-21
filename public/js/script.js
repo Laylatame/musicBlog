@@ -68,7 +68,7 @@ function emptyAll(){
 
 function init(){
 
-    $(".blogPosts").empty();
+    $(".blogPostsHome").empty();
 
     $.ajax({
         url: "http://localhost:8080/api/blog-posts",
@@ -82,15 +82,59 @@ function init(){
                 let author = (`<h4> Written by: ${response[i].author}</h4>`);
                 let date = (`<h6>Published on: ${response[i].publishDate}</h6>`);
                 let content = (`<p>${response[i].content}</p>`);
-                let id = (`<h6>ID: ${response[i]._id}</h6>`);
-                $('.blogPosts').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content}</div>`);
+                let id = (`<h6 id="postIdHome">ID: ${response[i]._id}</h6>`);
+                let buttonFav = (`<div id="buttonFav"><button type='submit' class='addFavorite'> Add to favorites </button></div>`);
+                //let buttonFav = (`<div id="buttonFav">${response[i].button}</div>`);
+                let secc = $(buttonFav)[0].childNodes[0].className;
+                //if(secc == "addFavorite"){
+                    $('.blogPostsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
+                //}
+                //console.log(secc[0].childNodes[0].className);
+                console.log(secc);
                 cont--;
                 } 
             }
         },
         error: function(err){
             if(err.statusText = "404"){
-                $('.blogPosts').append(`<p>Not logged in<p>`);
+                $('.blogPostsHome').append(`<p>Not logged in<p>`);
+            }
+            console.log("Error");
+        }
+    });
+
+    initFavorites();
+}
+
+function initFavorites(){
+    
+
+    $(".favBlogsHome").empty();
+
+    $.ajax({
+        url: "http://localhost:8080/api/favorites",
+        method: "GET",
+        dataType: "json",
+        success: function(response){
+            var cont = 10;
+            for (let i=0; i<response.length; i++){
+                if(cont>0){
+                let title = (`<h2>${response[i].title}</h2>`);
+                let author = (`<h4> Written by: ${response[i].author}</h4>`);
+                let date = (`<h6>Published on: ${response[i].publishDate}</h6>`);
+                let content = (`<p>${response[i].content}</p>`);
+                let id = (`<h6 id="postIdHome">ID: ${response[i]._id}</h6>`);
+                let buttonFav = (`<div id="buttonFav"><button type='submit' class='favoriteHome'> Delete from Favorites</button></div>`);
+                let secc = $(buttonFav)[0].childNodes[0].className;
+                $('.favBlogsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
+                console.log(secc);
+                cont--;
+                } 
+            }
+        },
+        error: function(err){
+            if(err.statusText = "404"){
+                $('.favBlogsHome').append(`<p>Not logged in<p>`);
             }
             console.log("Error");
         }
@@ -163,13 +207,12 @@ $("#loginSubmit").on("click", (event) => {
 $("#postBlog").on("click", (event) => {
     event.preventDefault();
     console.log("Post blog");
-    //Sacar el session actual, revisar username y ponerlo en lugar de autor
     $.ajax({
         url: "http://localhost:8080/api/blog-posts",
         data: JSON.stringify({
             "title": $("#titlePost").val(),
             "content": $("#contentPost").val(),
-            "author": $("#authorPost").val(),
+            //"author": $("#authorPost").val(),
             "publishDate": new Date()
         }),
         method: "POST",
@@ -181,7 +224,6 @@ $("#postBlog").on("click", (event) => {
             console.log(response.message);
             $("#titlePost").val("");
             $("#contentPost").val("");
-            $("#authorPost").val("");
             init();
         },
         error: function(err){
@@ -191,6 +233,76 @@ $("#postBlog").on("click", (event) => {
 
     });
 })
+
+
+$(".blogPostsHome, .favBlogsHome").on("click", "button", function(event) {
+    event.preventDefault();
+
+    let buttonFav = $(this);
+    let divButton = buttonFav.parent().parent();
+    let postID = divButton[0].childNodes[5];
+    if(buttonFav.hasClass("favoriteHome")){
+        buttonFav[0].className = "addFavorite";
+        buttonFav[0].textContent = "Add to favorites";
+
+        $.ajax({
+            url: "http://localhost:8080/api/deleteFavorite",
+            data: JSON.stringify({
+                "postId": postID.innerHTML
+            }),
+            method: "GET",
+            dataType: "json",
+            success: function(response){
+                for(let i=0; i<response.length; i++){
+                    if(response[i].postId == postID.innerHTML){
+                        console.log(response[i]._id)
+                        $.ajax({
+                            url: "http://localhost:8080/api/deleteFavorite",
+                            data: JSON.stringify({
+                                "id": response[i]._id
+                            }),
+                            method: "DELETE",
+                            dataType: "json",
+                            contentType: "application/json",
+                            success: function(response){
+                                console.log("Si cottio esto" + i);
+                                console.log(response);
+                            },
+                            error: function(err){
+                                console.log("Error");
+                            }
+                        });
+                    }
+                }
+            },
+            error: function(err){
+                console.log("Error");
+            }
+        });
+    } else{
+        $.ajax({
+            url: "http://localhost:8080/api/addFavorite",
+            data: JSON.stringify({
+                "postId": postID.innerHTML
+            }),
+            method: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            success: function(response){
+                console.log(this);
+            },
+            error: function(err){
+                console.log(err.statusText);
+            }
+        });
+
+        buttonFav[0].className = "favoriteHome";
+        buttonFav[0].textContent = "Delete from favorites";
+        console.log(divButton);
+        divButton[0].hidden = true;
+    }
+});
+
 /*
 $("#deleteBlog").on("click", (event) => {
     event.preventDefault();

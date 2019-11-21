@@ -10,6 +10,7 @@ const { DATABASE_URL, PORT } = require( './config' );
 const BlogPost = require('./public/js/blogPost');
 const VinylRecord = require('./public/js/vinylRecord');
 const User = require('./public/js/user');
+const FavReview = require('./public/js/favReview');
 
 let app = express();
 let jsonParser = bodyParser.json();
@@ -40,23 +41,42 @@ app.use(function(req, res, next) {
     next();
 });
 
+//Get all posts
 app.get("/api/blog-posts", (req, res) => {
     if(req.session.loggedin){
 
-    return BlogPost.find({}).sort({publishDate: 'desc'}).exec(function(err, blogPosts) {
-        if(err) {
-            res.statusMessage = "Something went wrong with the DB. Try again later.";
-            return res.status( 500 ).json({
-                status : 500,
-                message : "Something went wrong with the DB. Try again later."
-            });
-        } else {
-            return res.status(200).json(blogPosts);
-        }
-    });
+        return BlogPost.find({}).sort({publishDate: 'desc'}).exec(function(err, blogPosts) {
+            if(err) {
+                res.statusMessage = "Something went wrong with the DB. Try again later.";
+                return res.status( 500 ).json({
+                    status : 500,
+                    message : "Something went wrong with the DB. Try again later."
+                });
+            } else {
+                return res.status(200).json(blogPosts);
+            }
+        });
     }
     return res.status(404).json({message: "Not logged in", status: 404});
+});
 
+//Get favorite posts
+app.get("/api/favorites", (req, res) => {
+    if(req.session.loggedin){
+
+        return FavReview.find({}).sort({publishDate: 'desc'}).exec(function(err, favReviews) {
+            if(err) {
+                res.statusMessage = "Something went wrong with the DB. Try again later.";
+                return res.status( 500 ).json({
+                    status : 500,
+                    message : "Something went wrong with the DB. Try again later."
+                });
+            } else {
+                return res.status(200).json(favReviews);
+            }
+        });
+    }
+    return res.status(404).json({message: "Not logged in", status: 404});
 });
 
 
@@ -85,24 +105,21 @@ app.post("/api/register", jsonParser, (req, res, next) => {
 
     let { username, password } = req.body;
 
-
-   User.findOne({username : username}, function (err, user) {
-    if (!user){
-        return bcrypt.hash(password, 10).then(hash => {
-            //Create new entry on the database
-            let user = new User({username: username, password: hash});
+    User.findOne({username : username}, function (err, user) {
+        if (!user){
+            return bcrypt.hash(password, 10).then(hash => {
+                //Create new entry on the database
+                let user = new User({username: username, password: hash});
         
-            return user.save(function (err, user) {
-                if (err) return console.error(err);
-                return res.status(201).json({message: "Success", status: 201});
+                return user.save(function (err, user) {
+                    if (err) return console.error(err);
+                    return res.status(201).json({message: "Success", status: 201});
+                });
             });
-        });
-    } else {                
-        return res.status(409).json({message: "Username is taken.", status: 409});
-
-    }
+        } else {                
+            return res.status(409).json({message: "Username is taken.", status: 409});
+        }
     });
-
 })
 
 
@@ -135,16 +152,14 @@ app.post('/api/auth', function(req, res) {
     }
 });
 
+//Add New Review
 app.post("/api/blog-posts", jsonParser, (req, res) => {
     console.log(req.session.loggedin);
 
-
     let title = req.body.title;
     let content = req.body.content;
-    let author = req.body.author;
-    let publishDate = req.body.publishDate;
 
-    if (! title || ! content || ! author || ! publishDate){
+    if (! title || ! content){
         return res.status(406).json({message: "Fields incomplete", status: 406});
     }
 
@@ -152,8 +167,9 @@ app.post("/api/blog-posts", jsonParser, (req, res) => {
     let blogPost = new BlogPost ({
         title: title,
         content: content,
-        author: author,
-        publishDate: publishDate
+        author: req.session.username,
+        publishDate: new Date(),
+        button: "<button type='submit' class='addFavorite'> Add to favorites </button>"
     });
 
     blogPost.save(function (err, blogPost) {
@@ -161,6 +177,68 @@ app.post("/api/blog-posts", jsonParser, (req, res) => {
         return res.status(201).json({message: "Success: " + title + " was added.", status: 201});
       });
 
+});
+
+app.post("/api/addFavorite", jsonParser, (req, res) => {
+
+    let savedBy = req.session.username;
+    let postId = req.body.postId;
+
+    FavReview.new
+    let favReview = new FavReview ({
+        savedBy: savedBy,
+        postId: postId,
+    });
+
+    favReview.save(function (err, favReview) {
+        if (err) return console.error(err);
+        return res.status(201).json({message: "Success", status: 201});
+      });
+
+});
+
+app.get("/api/deleteFavorite", (req, res) => {
+
+    let savedBy = req.session.username;
+    let postId = req.body.postId;
+
+    return FavReview.find({"savedBy" : savedBy}, function (err, favReviews) {
+            return res.status(201).json(favReviews);
+        });
+});
+
+app.delete("/api/deleteFavorite", (req, res) => {
+
+    let id = req.body.id;
+    console.log(id);
+
+    FavReview.deleteOne({_id:id}, function(err, favReview) {
+        if(err) {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : "Something went wrong with the DB. Try again later."
+            });
+        } else {
+            return res.status(200).json(favReview);
+        }
+    });
+
+    
+/*
+    FavReview.where().findOneAndDelete({"_id": id}, (err, favReview) => {
+        if(err) {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status( 500 ).json({
+                status : 500,
+                message : "Something went wrong with the DB. Try again later."
+            });
+        } else {
+            console.log("Sucess");
+            return res.status(201).json(favReview);
+        }
+    });
+    */
 });
 
 /*
