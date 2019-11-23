@@ -1,6 +1,4 @@
 
-//import { request } from "http";
-
 function navigationMenu(){
     let menuItems = document.getElementsByTagName( "li" );
 
@@ -53,7 +51,6 @@ $("#search").submit(function(Event){
         }
         console.log(response.data);
     });
-
 })
 
 function emptyAll(){
@@ -195,6 +192,10 @@ function reload(){
 
 function initMyPosts(username){
     $(".postsMyBlogs").empty();
+    let currentSelected = document.getElementsByClassName( "modifyMyBlogs" );
+    let loggedSession = document.getElementsByClassName( "notLogged" );
+    currentSelected[0].hidden = false;
+    loggedSession[0].hidden = true;
 
     $.ajax({
         url: "http://localhost:8080/api/getUserReviews",
@@ -256,6 +257,7 @@ $("#registerSubmit").on("click", (event) => {
 //Initiate user session
 $("#loginSubmit").on("click", (event) => {
     event.preventDefault();
+    $("#showErrorLogin").empty();
 
     $.ajax({
         url: "http://localhost:8080/api/auth",
@@ -282,11 +284,22 @@ $("#loginSubmit").on("click", (event) => {
             initMyPosts(response);
         },
         error: function(err){
+            if(err.statusText == "Unauthorized"){
+                $("#showErrorLogin").append(`<h3 class="errorMessage">Username and password do not match</h3>`);
+                $("#usernameLogin").val("");
+                $("#passwordLogin").val("");
+            }
             console.log(err.statusText);
             return err;
         }
 
     });
+
+
+    let mainTitle = document.getElementsByClassName( "mainTitlePostsHome" );
+    let mainFav = document.getElementsByClassName( "mainTitleFavHome" );
+    mainTitle[0].hidden = false;
+    mainFav[0].hidden = false;
 })
 
 //Write new review

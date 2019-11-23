@@ -20,24 +20,31 @@
 
 
 
+
     <section id="homePage" hidden>
-         <div class ="mainHomePage">
-            <div class="postsHome">
-                <div class="mainTitlePostsHome">
-                    <h2>Latest Reviews</h2>
-                </div>
-                <div class="blogPostsHome"></div>
-            </div>
-            <div class="favBlogPostHome">
-                <div class="mainTitleFavHome">
-                    <h2>Favorite Reviews</h2>
-                </div>
-                <div class="favBlogsHome"></div>
-            </div>
-         </div>
     </section>
 
 
+
+
+
+
+    <section id="vinylPage" hidden>
+            <div class ="mainHomePage">
+                    <div class="postsHome">
+                        <div class="mainTitlePostsHome" hidden>
+                            <h2 >Latest Reviews</h2>
+                        </div>
+                        <div class="blogPostsHome"></div>
+                    </div>
+                    <div class="favBlogPostHome">
+                        <div class="mainTitleFavHome" hidden>
+                            <h2 >Favorite Reviews</h2>
+                        </div>
+                        <div class="favBlogsHome"></div>
+                    </div>
+                 </div>
+    </section>
 
 
 
@@ -46,10 +53,11 @@
 
     
     <section id="myBlogsPage" hidden>
+        <h3 class="notLogged">Not logged in. Please proceed to login page.</h3>
             <div class="mainMyBlogs">
                     <div class="postsMyBlogs">
                     </div>
-                    <div class="modifyMyBlogs">
+                    <div class="modifyMyBlogs" hidden>
                         <h2>Modify Reviews</h2>
                         <h3>Post New Review</h3>
                         <fieldset class="newBlog">
@@ -104,9 +112,23 @@
 
 
 
-    <section id="vinylPage" hidden>
-            My Vinyls
-    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     <section id="registerPage" hidden>
         <h2>Register</h2>
         <label for="usernameRegister">Username: </label>
@@ -123,6 +145,7 @@
         <label for="passwordLogin">Password: </label>
         <input id="passwordLogin" name="passwordLogin" type="password" required/>
         <button type="submit" id="loginSubmit">Submit</button>
+        <div id="showErrorLogin"></div>
     </section>
     <section id="logoutPage" hidden>
         <h2>Logout</h2>
