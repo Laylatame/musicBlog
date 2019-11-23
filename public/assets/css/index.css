@@ -1,23 +1,59 @@
 *{
     box-sizing: border-box;
-  }
+    background-color: white;
+}
   
-  body{
-      font-family: Verdana, sans-serif;
-      font-size: 13px;
-      color: #4F545F;
-      margin: 0;
-      padding: 10px;
-  }
+body{
+    font-family: Verdana, sans-serif;
+    font-size: 13px;
+    color: black;
+    margin: 0;
+    padding: 10px;
+}
   
-  h1{
-      background-color: #55B3C5;
-      margin: 10px 0px;
-      padding: 20px;
-      color: white;
-  }
+h1{
+    background-color: white;
+    margin: 10px 0px;
+    padding: 20px;
+    color: black;
+    border: 3px groove red;
+}
+
+#menu{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    overflow: hidden;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around; 
+    align-items: center;
+}
+
+#home, #vinyl, #myBlogs, #browse, #register, #login, #logout{
+    width: 100%;
+    text-align: center;
+    align-self: flex-start;
+    margin-right: 10px;
+}
+
+#home{
+    border-left: 8px black solid;
+}
+
+#menu > li{
+    float: left;
+    padding: 20px;
+}
   
-  fieldset{
+#menu > li:hover, .selected{
+    background-color: #1c1c1b;
+    color: white;
+    cursor: pointer;
+}
+
+fieldset{
     border: none;
     display: flex;
     flex-direction: row;
@@ -37,11 +73,19 @@
     word-break: break-all;
 }
 
+.modifyMyBlogs{
+    width: 50%;
+    padding: 0px 15px;
+    margin: 15px 15px;
+}
+
 #postBlog, #deleteBlog, #updateBlog{
     margin: 5px 0px;
     padding: 5px;
     background-color: gray;
     color: white;
+    border-top: 2px black;
+    border-bottom: 2px black;
 }
 
 .errorPost, .errorDelete, .errorUpdate{
@@ -54,88 +98,119 @@
     width: 300px;
 }
   
-  select{
-      font-size: 14px; 
-      width: 250px;  
-  }
+select{
+    font-size: 14px; 
+    width: 250px;  
+}
   
-  .buttonHover{
-      font-size: 16px;
-      padding: 10px 20px;
-      text-align : center;
-      color: white;
-      margin-left: 20px;
-      border-radius: 7px;
-  }
-  
-  #submitButton{
-      background-color: #56C56F;
-  }
-  
-  .buttonHover:hover {
-      cursor: pointer;
-      opacity: 0.8;
-  }
-  
-  #cancelButton{
-      background-color: #D9534F;
-  }
-  
-  #menu{
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    background-color: #CCC;
-    overflow: hidden;
-  }
-  
-  #menu > li{
-    float: left;
-    padding: 20px;
-  }
-  
-  #menu > li:hover, .selected{
-    background-color: #999;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .errorMessage{
-    color: red;
-  }
+#submitButton{
+    background-color: #56C56F;
+}
 
-  .post{
-    border: 2px dashed #dddddd;
-    margin: 15px 0px;
-    padding: 0px 15px;
+  
+#cancelButton{
+    background-color: #D9534F;
+}
+  
+.errorMessage{
+    color: red;
 }
 
 .mainHomePage, .mainMyBlogs{
-    margin: 0px 20px;
+    margin: 10px 10px;
     display: flex;
     flex-direction: row;
 }
 
 .postsHome{
     width: 50%;
-}
+    margin: 0px 15px 0px 0px;
 
+}
 .favBlogPostHome{
     width: 50%;
-    padding: 0px 0px 0px 5px;
+    margin: 0px 0px 0px 15px;
+}
+
+.post{
+    border: 2px solid red;
+    background-color: white;
+    color: black;
+    margin: 15px 0px;
+    padding: 0px 15px;
+}
+
+#titleBlog{
+    background-color: white;
+    color: black;
+    padding: 0px 0px 3px 3px;
+    border-bottom: 1px solid gray;
+    border-left: 1px solid gray;
+}
+
+#authorBlog, #dateBlog, #postIdHome, #contentBlog, #buttonFav{
+    background-color: white;
+    color: black;
+}
+
+.addFavorite{
+    background-color: white;
+    margin: 2px 0px 5px 0px;
+    padding: 10px;
+    border-radius: 4px;
 }
 
 .favoriteHome{
     background-color: red;
+    margin: 2px 0px 5px 0px;
+    padding: 10px;
+    border-radius: 4px;
 }
 
 .postsMyBlogs{
     width: 50%;
 }
 
-.modifyMyBlogs{
-    width: 50%;
-    padding: 0px 15px;
-    margin: 15px 15px;
-    border: 2px dashed #dddddd;
+
+#title{
+    padding: 20px;
+    background-color:darkgray;
+}
+
+#postOrder{
+    display: flex;
+    background-color: white;
+    flex-direction: row;
+    width: 100%;
+    text-align: left;
+    align-self: flex-start;
+    justify-content: space-between;
+}
+
+#searchMusic{
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+#searchTermMusic{
+    padding: 10px 80px;
+}
+
+#buttonsSearch{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    justify-content: space-around;
+}
+
+.searchArtist, .searchTrack, .searchAlbum{
+    padding: 5px;
+}
+
+.resultsMusic{
+    align-items: center;
 }

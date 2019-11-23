@@ -1,5 +1,6 @@
 <%- include('header') -%>
     <section id="homePage" hidden>
+        <img src="homePage.jpg" alt="Music Concert">
     </section>
 
 
@@ -22,17 +23,17 @@
             <div class ="mainHomePage">
                     <div class="postsHome">
                         <div class="mainTitlePostsHome" hidden>
-                            <h2 >Latest Reviews</h2>
+                            <h2 id="title">Latest Reviews</h2>
                         </div>
                         <div class="blogPostsHome"></div>
                     </div>
                     <div class="favBlogPostHome">
                         <div class="mainTitleFavHome" hidden>
-                            <h2 >Favorite Reviews</h2>
+                            <h2 id="title">Favorite Reviews</h2>
                         </div>
                         <div class="favBlogsHome"></div>
                     </div>
-                 </div>
+            </div>
     </section>
 
 
@@ -101,17 +102,19 @@
 
 
     <section id="browsePage" hidden>
-            <form id="searchMusic" onsubmit="return false">
+            <form id="searchMusic" onsubmit="return false" hidden>
                 <label for="searchTermMusic">Search: </label>
                 <input id="searchTermMusic" name="searchMusic" type="text" required/>
-                <div class="searchArtist">
+                <div id="buttonsSearch">
+                    <div class="searchArtist">
                         <button type="button" class="searchArtist">Artist</button>
-                </div>
-                <div class="searchTrack">
-                    <button class="searchTrack">Track</button>
-                </div>
-                <div class="searchAlbum">
-                    <button class="searchAlbum">Album</button>
+                    </div>
+                    <div class="searchTrack">
+                        <button class="searchTrack">Track</button>
+                    </div>
+                    <div class="searchAlbum">
+                        <button class="searchAlbum">Album</button>
+                    </div>
                 </div>
             </form>
             <div class="resultsMusic">
@@ -188,6 +191,9 @@
     <section id="logoutPage" hidden>
         <h2>Logout</h2>
         <p>Logout Page</p>
+        <h3>Are you sure you want to logout?</h3>
+        <button type="button" id="yesLogout">Logout</button>
+        <button type="button" id="noLogout">Cancel</button>
     </section>
     <%- include('footer') -%>
     

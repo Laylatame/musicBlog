@@ -38,9 +38,12 @@ function searchArtist(idArtist){
     }
     
     $.ajax(settings).done(function (response) {
-        $('#searchResultsMusic').append(`<li>${response.name}</li>`)
+        let name = (`<h2>${response.name}</h2>`);
+        let link = (`<h3>${response.link}</h3>`);
+        let picture = (`<h3>${response.picture}</h3>`);
+        let noAlbums = (`<h3>${response.nb_albums}</h3>`);
 
-        console.log(response);
+        $('.resultsMusic').append(`<div class="showArtist"> ${name} ${link} ${picture} ${noAlbums}</div>`);
     });
 }
 
@@ -58,9 +61,23 @@ function searchAlbum(idAlbum){
     }
     
     $.ajax(settings).done(function (response) {
-        $('#searchResultsMusic').append(`<li>${response.title}</li>`)
+        let title = response.title;
+        let coverPhoto = response.cover;
+        let link = response.link;
+        let noTracks = response.nb_tracks;
+        let releaseDate = response.release_date;
+        let artist = response.artist.name;
 
-        console.log(response);
+        $('.resultsMusic').append(`<div class="showAlbum">${coverPhoto} ${title} ${artist} ${noTracks} ${releaseDate} ${link}</li>`)
+
+
+        for(let i=0; i<noTracks; i++){
+            let songTitle = response.tracks.data[i].title;
+            let songDur = response.tracks.data[i].duration;
+            let expLyrics = response.tracks.data[i].explicit_lyrics;
+        }
+
+        $('.resultsMusic').append(`<li>${songTitle} ${songDur} ${expLyrics}</li>`)
     });
 
 }
@@ -79,7 +96,16 @@ function searchTrack(idTrack){
     }
     
     $.ajax(settings).done(function (response) {
-        $('#searchResultsMusic').append(`<li>${response.title}</li>`)
+        let album = response.album.title;
+        let trackNo = response.track_position;
+        let artist = response.artist.name;
+        let duration = response.duration;
+        let link = response.link;
+        let title = response.title;
+        let dateRelease = response.release_date;
+
+
+        $('.resultsMusic').append(`<div class="showSongs"> ${title} ${artist} ${album} ${trackNo} ${duration} ${dateRelease} ${link}</div>`);
 
         console.log(response);
     });
@@ -91,7 +117,7 @@ $(".searchArtist, .searchTrack, .searchAlbum").on("click", "button", function(ev
     event.preventDefault();
 
     buttonClicked = $(this);
-    $('#searchResultsMusic').empty();
+    $('.resultsMusic').empty();
     var searchTerm = ($("#searchTermMusic").val());
     
     //Search
@@ -107,29 +133,27 @@ $(".searchArtist, .searchTrack, .searchAlbum").on("click", "button", function(ev
     }
     
     $.ajax(settings).done(function (response) {
+        console.log(response);
         //Browse song or browse album or browse artist
         let idArtist = response.data[0].artist.id;
         let artist = response.data[0].artist.name;
+        var idAlbum = response.data[0].album.id;
+        var album = response.data[0].album.title;
 
         if(buttonClicked.hasClass("searchArtist")){
             if(artist.toUpperCase == searchTerm.toUpperCase){
                 searchArtist(idArtist);
             }
-        } else{
+        } 
+        if(buttonClicked.hasClass("searchAlbum")){
+            for(let i=0; i<5; i++){
+                searchTrack(idAlbum);
+            }
+        }
+        
+        if(buttonClicked.hasClass("searchTrack")){
             for(let i=0; i<10; i++){
-                var idTrack = response.data[i].id;
-                var idAlbum = response.data[i].album.id;
-                var album = response.data[i].album.name;
-
-                if(buttonClicked.hasClass("searchTrack")){
-                    searchTrack(idTrack);
-                } 
-                
-                if(buttonClicked.hasClass("searchAlbum")){
-                    if(album.toUpperCase == album.toUpperCase){
-                        searchTrack(idAlbum);
-                    }
-                }
+                searchTrack(response.data[i].id); 
             }
         }
     });  
@@ -193,7 +217,7 @@ function init(){
                 let date = (`<h6>Published on: ${response[i].publishDate}</h6>`);
                 let content = (`<p>${response[i].content}</p>`);
                 let id = (`<h6 id="postIdHome">ID: ${response[i]._id} </h6>`);
-                let buttonFav = (`<div id="buttonFav"><button type='submit' class='favoriteHome'> Add to favorites </button></div>`);
+                let buttonFav = (`<div id="buttonFav"><button type='submit' class='favoriteHome'> Delete from favorites </button></div>`);
                 //let secc = $(buttonFav)[0].childNodes[0].className;
                 $('.favBlogsHome').append(`<div class="post"> ${title} ${author} ${id} ${date} ${content} ${buttonFav}</div>`);
                 cont--;
@@ -381,6 +405,7 @@ $("#loginSubmit").on("click", (event) => {
 
     let mainTitle = document.getElementsByClassName( "mainTitlePostsHome" );
     let mainFav = document.getElementsByClassName( "mainTitleFavHome" );
+    document.getElementById("searchMusic").hidden = false;
     mainTitle[0].hidden = false;
     mainFav[0].hidden = false;
 })
@@ -558,6 +583,35 @@ $("#updateBlog").on("click", (event) => {
     });
 })
 
+$("#yesLogout").on("click", (event) => {
+    event.preventDefault();
+
+    document.getElementById("register").hidden = false;
+    document.getElementById("login").hidden = false;
+    document.getElementById("logout").hidden = true;
+    document.getElementById("logoutPage").hidden = true;
+    document.getElementById("loginPage").hidden = false;
+    document.getElementById("login").className = "selected";
+    document.getElementById("logout").className = "";
+    document.getElementById("loginPage").className = "currentSelected";
+    document.getElementById("logoutPage").className = "";
+
+    //terminate session
+});
+
+$("#noLogout").on("click", (event) => {
+    event.preventDefault();
+
+    document.getElementById("logoutPage").hidden = true;
+    document.getElementById("homePage").hidden = false;
+    document.getElementById("home").className = "selected";
+    document.getElementById("logout").className = "";
+    document.getElementById("homePage").className = "currentSelected";
+    document.getElementById("logoutPage").className = "";
+
+});
+
+
+
 navigationMenu();
 init();
-//initMyPosts();
