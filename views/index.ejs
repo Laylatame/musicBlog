@@ -1,28 +1,17 @@
 <%- include('header') -%>
-    <section id="browsePage" hidden>
-        <form id="search">
-            <label for="searchTerm">Search: </label>
-            <input id="searchTerm" name="searchDog" type="text" required/>
-            <button type="submit">Submit</button>
-        </form>
-        <div class="results">
-                <ul id="searchResults">
-                </ul>
-        </div>
-    </section>
-
-
-
-
-
-
-
-
-
-
-
     <section id="homePage" hidden>
     </section>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -45,6 +34,13 @@
                     </div>
                  </div>
     </section>
+
+
+
+
+
+
+
 
 
 
@@ -104,6 +100,25 @@
 
 
 
+    <section id="browsePage" hidden>
+            <form id="searchMusic" onsubmit="return false">
+                <label for="searchTermMusic">Search: </label>
+                <input id="searchTermMusic" name="searchMusic" type="text" required/>
+                <div class="searchArtist">
+                        <button type="button" class="searchArtist">Artist</button>
+                </div>
+                <div class="searchTrack">
+                    <button class="searchTrack">Track</button>
+                </div>
+                <div class="searchAlbum">
+                    <button class="searchAlbum">Album</button>
+                </div>
+            </form>
+            <div class="resultsMusic">
+                    <ul id="searchResultsMusic">
+                    </ul>
+            </div>
+    </section>
 
 
 
@@ -138,6 +153,16 @@
         <button type="submit" id="registerSubmit">Submit</button>
         <div id="showErrorRegister"></div>
     </section>
+
+
+
+
+
+
+
+
+
+
     <section id="loginPage" class="currentSelected" >
         <h2>Login</h2>
         <label for="usernameLogin">Username: </label>
@@ -147,6 +172,19 @@
         <button type="submit" id="loginSubmit">Submit</button>
         <div id="showErrorLogin"></div>
     </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
     <section id="logoutPage" hidden>
         <h2>Logout</h2>
         <p>Logout Page</p>

@@ -25,12 +25,75 @@ function navigationMenu(){
   }
 }
 
+function searchArtist(idArtist){
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://deezerdevs-deezer.p.rapidapi.com/artist/" + idArtist,
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
+            "x-rapidapi-key": "35f511e5e4msh7ef135374e3c625p125036jsn0ac6584820aa"
+        }
+    }
+    
+    $.ajax(settings).done(function (response) {
+        $('#searchResultsMusic').append(`<li>${response.name}</li>`)
 
-$("#search").submit(function(Event){
+        console.log(response);
+    });
+}
+
+function searchAlbum(idAlbum){
+    console.log(idAlbum);
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://deezerdevs-deezer.p.rapidapi.com/album/" + idAlbum,
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
+            "x-rapidapi-key": "35f511e5e4msh7ef135374e3c625p125036jsn0ac6584820aa"
+        }
+    }
+    
+    $.ajax(settings).done(function (response) {
+        $('#searchResultsMusic').append(`<li>${response.title}</li>`)
+
+        console.log(response);
+    });
+
+}
+
+function searchTrack(idTrack){
+    console.log(idTrack);
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://deezerdevs-deezer.p.rapidapi.com/track/" + idTrack,
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
+            "x-rapidapi-key": "35f511e5e4msh7ef135374e3c625p125036jsn0ac6584820aa"
+        }
+    }
+    
+    $.ajax(settings).done(function (response) {
+        $('#searchResultsMusic').append(`<li>${response.title}</li>`)
+
+        console.log(response);
+    });
+
+}
+
+
+$(".searchArtist, .searchTrack, .searchAlbum").on("click", "button", function(event) {
     event.preventDefault();
 
-    var searchTerm = ($("#searchTerm").val());
-
+    buttonClicked = $(this);
+    $('#searchResultsMusic').empty();
+    var searchTerm = ($("#searchTermMusic").val());
+    
     //Search
     var settings = {
         "async": true,
@@ -44,14 +107,34 @@ $("#search").submit(function(Event){
     }
     
     $.ajax(settings).done(function (response) {
-        let ejemplo = response.data[3].artist.name;
-        for(let i=0; i<5; i++){
-            $('#searchResults').append(`<li>${response.data[i].artist.name}</li>`)
-        //Agregar boton
+        //Browse song or browse album or browse artist
+        let idArtist = response.data[0].artist.id;
+        let artist = response.data[0].artist.name;
+
+        if(buttonClicked.hasClass("searchArtist")){
+            if(artist.toUpperCase == searchTerm.toUpperCase){
+                searchArtist(idArtist);
+            }
+        } else{
+            for(let i=0; i<10; i++){
+                var idTrack = response.data[i].id;
+                var idAlbum = response.data[i].album.id;
+                var album = response.data[i].album.name;
+
+                if(buttonClicked.hasClass("searchTrack")){
+                    searchTrack(idTrack);
+                } 
+                
+                if(buttonClicked.hasClass("searchAlbum")){
+                    if(album.toUpperCase == album.toUpperCase){
+                        searchTrack(idAlbum);
+                    }
+                }
+            }
         }
-        console.log(response.data);
-    });
-})
+    });  
+});
+
 
 function emptyAll(){
     $(".blogPosts").empty();
