@@ -297,9 +297,9 @@ function reload(){
 function initMyPosts(username){
     $(".postsMyBlogs").empty();
     let currentSelected = document.getElementsByClassName( "modifyMyBlogs" );
-    let loggedSession = document.getElementsByClassName( "notLogged" );
+    //let loggedSession = document.getElementsByClassName( "notLogged" );
     currentSelected[0].hidden = false;
-    loggedSession[0].hidden = true;
+    //loggedSession[0].hidden = true;
 
     $.ajax({
         url: "http://localhost:8080/api/getUserReviews",
