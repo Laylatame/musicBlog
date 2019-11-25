@@ -38,12 +38,13 @@ function searchArtist(idArtist){
     }
     
     $.ajax(settings).done(function (response) {
+        console.log(response);
         let name = (`<h2>${response.name}</h2>`);
-        let link = (`<h3>${response.link}</h3>`);
-        let picture = (`<h3>${response.picture}</h3>`);
-        let noAlbums = (`<h3>${response.nb_albums}</h3>`);
+        let link = (`<a href="${response.link}" target="_blank" id="linkArtist">Visit their page</a>`);
+        let picture = (`<img src="${response.picture_medium}"></img>`);
+        let noAlbums = (`<h3>Number of albums: ${response.nb_album}</h3>`);
 
-        $('.resultsMusic').append(`<div class="showArtist"> ${name} ${link} ${picture} ${noAlbums}</div>`);
+        $('.resultsMusic').append(`<div class="showArtist"> <div class="imgArtist">${picture}</div><div class="infoArtist">${name} ${noAlbums} ${link}</div></div>`);
     });
 }
 
@@ -61,14 +62,14 @@ function searchAlbum(idAlbum){
     }
     
     $.ajax(settings).done(function (response) {
-        let title = response.title;
-        let coverPhoto = response.cover;
-        let link = response.link;
-        let noTracks = response.nb_tracks;
-        let releaseDate = response.release_date;
-        let artist = response.artist.name;
+        let title = `<div class="titleAlbum"><h2>${response.title}</h2></div>`;
+        let picture = (`<img src="${response.cover_medium}"></img>`);
+        let link = `<div class="linkSong"> <a href="${response.link}" target="_blank" id="linkSong">Listen</a></div>`;
+        let noTracks = `<div class="noTracks">No. Tracks: ${response.nb_tracks}</div>`;
+        let dateRelease = `<div class="dateAlbum">Date released: ${response.release_date}</div>`;
+        let artist = `<div class="artistAlbum">Artist: ${response.artist.name}</div>`;
 
-        $('.resultsMusic').append(`<div class="showAlbum">${coverPhoto} ${title} ${artist} ${noTracks} ${releaseDate} ${link}</li>`)
+        $('.showAlbums').append(`<div class="album"><div class="imgAlbum">${picture}</div><div class="infoAlbum">${title} ${artist} ${noTracks} ${dateRelease} ${link}</div></div>`);
 
 
         for(let i=0; i<noTracks; i++){
@@ -77,13 +78,11 @@ function searchAlbum(idAlbum){
             let expLyrics = response.tracks.data[i].explicit_lyrics;
         }
 
-        $('.resultsMusic').append(`<li>${songTitle} ${songDur} ${expLyrics}</li>`)
     });
 
 }
 
 function searchTrack(idTrack){
-    console.log(idTrack);
     var settings = {
         "async": true,
         "crossDomain": true,
@@ -96,18 +95,21 @@ function searchTrack(idTrack){
     }
     
     $.ajax(settings).done(function (response) {
-        let album = response.album.title;
-        let trackNo = response.track_position;
-        let artist = response.artist.name;
+        let album = `<div class="albumSong">Album: ${response.album.title}</div>`;
+        let picture = (`<img src="${response.album.cover_medium}"></img>`);
+        let trackNo = `<div class="trackNoSong">Track No. ${response.track_position}</div>`;
+        let artist = `<div class="artistSong">Artist: ${response.artist.name}</div>`;
         let duration = response.duration;
-        let link = response.link;
-        let title = response.title;
-        let dateRelease = response.release_date;
+        let minDur = Math.floor(duration / 60);
+        let secDur = duration - (minDur*60);
+        let durFinal = `<div class="durationSong">Duration: ${minDur}:${secDur} minutes</div>`;
+        let link = `<div class="linkSong"> <a href="${response.link}" target="_blank" id="linkSong">Listen</a></div>`;
+        let title = `<div class="titleSong"><h2>${response.title}</h2></div>`;
+        let dateRelease = `<div class="dateSong">Date released: ${response.release_date}</div>`;
 
 
-        $('.resultsMusic').append(`<div class="showSongs"> ${title} ${artist} ${album} ${trackNo} ${duration} ${dateRelease} ${link}</div>`);
+        $('.showSongs').append(`<div class="song"><div class="imgSong">${picture}</div><div class="infoSong">${title} ${artist} ${album} ${trackNo} ${durFinal} ${dateRelease} ${link}</div></div>`);
 
-        console.log(response);
     });
 
 }
@@ -133,11 +135,9 @@ $(".searchArtist, .searchTrack, .searchAlbum").on("click", "button", function(ev
     }
     
     $.ajax(settings).done(function (response) {
-        console.log(response);
         //Browse song or browse album or browse artist
         let idArtist = response.data[0].artist.id;
         let artist = response.data[0].artist.name;
-        var idAlbum = response.data[0].album.id;
         var album = response.data[0].album.title;
 
         if(buttonClicked.hasClass("searchArtist")){
@@ -146,15 +146,21 @@ $(".searchArtist, .searchTrack, .searchAlbum").on("click", "button", function(ev
             }
         } 
         if(buttonClicked.hasClass("searchAlbum")){
+            $('.resultsMusic').append(`<div class="showAlbums">`);
             for(let i=0; i<5; i++){
-                searchTrack(idAlbum);
+                var idAlbum = response.data[i].album.id;
+                searchAlbum(idAlbum);
             }
+            $('.resultsMusic').append(`</div>`);
+
         }
         
         if(buttonClicked.hasClass("searchTrack")){
+            $('.resultsMusic').append(`<div class="showSongs">`);
             for(let i=0; i<10; i++){
                 searchTrack(response.data[i].id); 
             }
+            $('.resultsMusic').append(`</div>`);
         }
     });  
 });
@@ -196,9 +202,6 @@ function init(){
             }
         },
         error: function(err){
-            if(err.statusText = "404"){
-                $('.blogPostsHome').append(`<p>Not logged in. Proceed to login page.<p>`);
-            }
             console.log("Error");
         }
     });
@@ -260,9 +263,6 @@ function reload(){
             }
         },
         error: function(err){
-            if(err.statusText = "404"){
-                $('.blogPostsHome').append(`<p>Not logged in. Proceed to login page.<p>`);
-            }
             console.log("Error");
         }
     });
@@ -289,9 +289,6 @@ function reload(){
             }
         },
         error: function(err){
-            if(err.statusText = "300"){
-                $('.favBlogsHome').append(`<p>Not logged in. Proceed to login page.<p>`);
-            }
             console.log("Error");
         }
     });
@@ -324,9 +321,6 @@ function initMyPosts(username){
             }
         },
         error: function(err){
-            if(err.statusText = "404"){
-                $('.postsMyBlogs').append(`<p>Not logged in. Proceed to login page.<p>`);
-            }
             console.log(err.status);
         }
     });
@@ -337,6 +331,8 @@ function initMyPosts(username){
 $("#registerSubmit").on("click", (event) => {
     event.preventDefault();
     $("#showErrorRegister").empty();
+    console.log($("#usernameRegister").val());
+    console.log($("#passwordRegister").val());
 
     $.ajax({
         url: "http://localhost:8080/api/register",
@@ -408,6 +404,10 @@ $("#loginSubmit").on("click", (event) => {
     document.getElementById("searchMusic").hidden = false;
     mainTitle[0].hidden = false;
     mainFav[0].hidden = false;
+    document.getElementsByClassName("titleVinylPageImage")[0].hidden = true;
+    document.getElementById("vinylPageImage").hidden = true;
+    document.getElementsByClassName("titleBlogsPageImage")[0].hidden = true;
+    document.getElementById("blogPageImage").hidden = true;
 })
 
 //Write new review

@@ -2,6 +2,133 @@
     box-sizing: border-box;
     background-color: white;
 }
+
+#homePage{
+    position: relative;
+    text-align: center;
+}
+
+#homePageImage{
+    width: 100%;
+    margin-top: 10px;
+}
+
+#homePage .titleHomePageImage{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); 
+    color: #f1f1f1; 
+    width: 50%; 
+    padding: 40px; 
+    font-size: 40px;
+}
+
+#vinylPageImage, #blogPageImage, #registerPageImage{
+    width: 100%;
+    margin-top: 10px;
+}
+
+
+#vinylPage .titleVinylPageImage{
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); 
+    color: #f1f1f1; 
+    width: 50%; 
+    padding: 40px; 
+    font-size: 40px;
+    text-align: center;
+}
+
+#myBlogsPage .titleBlogsPageImage{
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); 
+    color: #f1f1f1; 
+    width: 50%; 
+    padding: 40px; 
+    font-size: 40px;
+    text-align: center;
+}
+
+#registerPage .titleRegisterPageImage{
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); 
+    color: #f1f1f1; 
+    width: 50%; 
+    padding: 40px; 
+    text-align: center;
+}
+
+#loginPage .titleLoginPageImage{
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); 
+    color: #f1f1f1; 
+    width: 50%; 
+    padding: 40px; 
+    text-align: center;
+}
+
+#logoutPage .titleLogoutPageImage{
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); 
+    color: #f1f1f1; 
+    width: 50%; 
+    padding: 40px; 
+    text-align: center;
+}
+
+.titleRegisterPageImage, .titleLoginPageImage{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.usernameRegister, .passwordRegister, .usernameLogin, .passwordLogin{
+    background-color: transparent;
+    font-size: 20px;
+    padding: 10px;
+    color: white;
+}
+
+#registerTitleImg, #loginTitleImg, #logoutTitleImg{
+    background-color: transparent;
+    font-size: 40px;
+    border: 2px white solid;
+    padding: 10px;
+}
+
+#logoutLegend{
+    background-color: transparent;
+    font-size: 25px;
+    padding: 10px;
+}
+
+#registerSubmit, #loginSubmit{
+    margin: 20px 70px;
+    padding: 10px;
+}
   
 body{
     font-family: Verdana, sans-serif;
@@ -187,6 +314,11 @@ select{
     justify-content: space-between;
 }
 
+.styleBrowsePage{
+    display: flex;
+    flex-direction: column;
+}
+
 #searchMusic{
     margin: 10px;
     padding: 10px;
@@ -211,6 +343,54 @@ select{
     padding: 5px;
 }
 
-.resultsMusic{
-    align-items: center;
+.showArtist{
+    margin: 10px 300px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    border: 2px solid black;
+    justify-content: flex-start;
 }
+
+.imgArtist, .imgSong, .imgAlbum{
+    width: 30%;
+    align-self: flex-start;
+}
+
+.infoArtist{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    padding: 30px;
+    justify-content: space-around;
+}
+
+#linkArtist, #linkSong{
+    color: black;
+    font-size: 14px;
+}
+
+.showSongs, .showAlbums{
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.song, .album{
+    display: flex;
+    flex-direction: row;
+    border: 2px solid black;
+    margin: 10px 300px;
+    line-height: 30px;
+    padding: 10px;
+}
+
+.infoSong, .infoAlbum{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    justify-content: space-around;
+    padding-left: 10px;
+}
+

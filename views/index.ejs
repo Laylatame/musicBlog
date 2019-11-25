@@ -1,6 +1,7 @@
 <%- include('header') -%>
     <section id="homePage" hidden>
-        <img src="homePage.jpg" alt="Music Concert">
+        <img src="https://miro.medium.com/max/5600/1*wjfSFGr3OzwP4I6nQ12EvQ.png" alt="Music festival" id="homePageImage"/>
+        <div class="titleHomePageImage">W  E  L  C  O  M  E  !</div>
     </section>
 
 
@@ -20,6 +21,8 @@
 
 
     <section id="vinylPage" hidden>
+            <img src="https://miro.medium.com/max/5600/1*wjfSFGr3OzwP4I6nQ12EvQ.png" alt="Music festival" id="vinylPageImage"/>
+            <div class="titleVinylPageImage">Not logged in.  <br />Please proceed to login page.</div>
             <div class ="mainHomePage">
                     <div class="postsHome">
                         <div class="mainTitlePostsHome" hidden>
@@ -50,7 +53,8 @@
 
     
     <section id="myBlogsPage" hidden>
-        <h3 class="notLogged">Not logged in. Please proceed to login page.</h3>
+        <img src="https://miro.medium.com/max/5600/1*wjfSFGr3OzwP4I6nQ12EvQ.png" alt="Music festival" id="blogPageImage"/>
+        <div class="titleBlogsPageImage">Not logged in.  <br />Please proceed to login page.</div>
             <div class="mainMyBlogs">
                     <div class="postsMyBlogs">
                     </div>
@@ -102,6 +106,7 @@
 
 
     <section id="browsePage" hidden>
+        <div class="styleBrowsePage">
             <form id="searchMusic" onsubmit="return false" hidden>
                 <label for="searchTermMusic">Search: </label>
                 <input id="searchTermMusic" name="searchMusic" type="text" required/>
@@ -121,6 +126,7 @@
                     <ul id="searchResultsMusic">
                     </ul>
             </div>
+        </div>
     </section>
 
 
@@ -148,13 +154,16 @@
 
     
     <section id="registerPage" hidden>
-        <h2>Register</h2>
-        <label for="usernameRegister">Username: </label>
-        <input id="usernameRegister" name="usernameRegister" type="text" required/>
-        <label for="passwordRegister">Password: </label>
-        <input id="passwordRegister" name="passwordRegister" type="password" required/>
-        <button type="submit" id="registerSubmit">Submit</button>
-        <div id="showErrorRegister"></div>
+        <img src="https://miro.medium.com/max/5600/1*wjfSFGr3OzwP4I6nQ12EvQ.png" alt="Music festival" id="registerPageImage"/>
+        <div class="titleRegisterPageImage">
+            <p id="registerTitleImg">Register</p>
+            <label for="usernameRegister" class="usernameRegister">Username: </label>
+            <input id="usernameRegister" name="usernameRegister" type="text" required/>
+            <label for="passwordRegister" class="passwordRegister">Password: </label>
+            <input id="passwordRegister" name="passwordRegister" type="password" required/>
+            <button type="submit" id="registerSubmit">Submit</button>
+            <div id="showErrorRegister"></div>
+        </div>
     </section>
 
 
@@ -167,13 +176,16 @@
 
 
     <section id="loginPage" class="currentSelected" >
-        <h2>Login</h2>
-        <label for="usernameLogin">Username: </label>
-        <input id="usernameLogin" name="usernameLogin" type="text" required/>
-        <label for="passwordLogin">Password: </label>
-        <input id="passwordLogin" name="passwordLogin" type="password" required/>
-        <button type="submit" id="loginSubmit">Submit</button>
-        <div id="showErrorLogin"></div>
+        <img src="https://miro.medium.com/max/5600/1*wjfSFGr3OzwP4I6nQ12EvQ.png" alt="Music festival" id="registerPageImage"/>
+        <div class="titleLoginPageImage">
+            <p id="loginTitleImg">Login</p>
+            <label for="usernameLogin" class="usernameLogin">Username: </label>
+            <input id="usernameLogin" name="usernameLogin" type="text" required/>
+            <label for="passwordLogin" class="passwordLogin">Password: </label>
+            <input id="passwordLogin" name="passwordLogin" type="password" required/>
+            <button type="submit" id="loginSubmit">Submit</button>
+            <div id="showErrorLogin"></div>
+        </div>
     </section>
 
 
@@ -189,11 +201,14 @@
 
 
     <section id="logoutPage" hidden>
-        <h2>Logout</h2>
-        <p>Logout Page</p>
-        <h3>Are you sure you want to logout?</h3>
-        <button type="button" id="yesLogout">Logout</button>
-        <button type="button" id="noLogout">Cancel</button>
+        <img src="https://miro.medium.com/max/5600/1*wjfSFGr3OzwP4I6nQ12EvQ.png" alt="Music festival" id="registerPageImage"/>
+        <div class="titleLogoutPageImage">
+            <p id="logoutTitleImg">Logout</p>
+            <p id="logoutLegend">Are you sure you want to logout?</p>
+            <button type="button" id="yesLogout">Logout</button>
+            <button type="button" id="noLogout">Cancel</button>
+            <div id="showErrorLogin"></div>
+        </div>
     </section>
     <%- include('footer') -%>
     
